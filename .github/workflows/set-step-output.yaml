@@ -1,0 +1,19 @@
+---
+name: ci
+on: [push]
+
+jobs:
+  set_step_output:
+    name: Set step output
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1
+        id: step_1
+        run: |
+          bar_env="bar"
+          echo "::set-output name=foo::bar_env value is ${bar_env}"
+
+      - name: Step 2
+        run: |
+          echo ${{ steps.step_1.outputs.foo }}
+
