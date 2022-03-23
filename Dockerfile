@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:alpine AS builder
+FROM golang:alpine3.15 AS builder
 
 WORKDIR /
 COPY . .
