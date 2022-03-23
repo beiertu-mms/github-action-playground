@@ -3,7 +3,7 @@ FROM golang:alpine3.15 AS builder
 
 WORKDIR /
 COPY . .
-RUN go get -d
+RUN apk update && apk add git
 RUN go build -o hello
 
 # Build the final image
