@@ -1,0 +1,60 @@
+---
+name: Docker multi-stage build
+on: [push]
+
+jobs:
+  docker_multi_stage_build:
+    name: Docker multi-stage build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # - name: Setup Go
+      #   uses: actions/setup-go@v2
+      #   with:
+      #     go-version: 1.18
+      #
+      # - name: Setup Cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/go/pkg/mod              # Module download cache
+      #       ~/.cache/go-build         # Build cache (Linux)
+      #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-go-
+      #
+      # - name: Build
+      #   run: go build
+      #
+      # - name: Test
+      #   run: go test
+
+      - name: Create docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: tungbeier/hello
+          flavor: |
+            latest=false
+          # semver is used as tag for push of a git tag (e.g. v1.0.0)
+          # raw is used as tag for pushes to any branch (e.g. master.432, compatible with current gitops glob pattern)
+          # sha is used additionally as tag for pushes to any branch (e.g. master-8dx0339-202110210011)
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,prefix={{branch}}.,value=${{ github.run_number }},enable=${{startsWith(github.ref, 'refs/heads')}}
+            type=sha,prefix={{branch}}-,suffix=-{{date 'YYYYMMDDhhmm'}},enable=${{startsWith(github.ref, 'refs/heads')}}
+          labels: |
+            org.opencontainers.image.vendor=tungbeier
+            org.opencontainers.image.maintainer=tung.beier@gmx.de
+
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
