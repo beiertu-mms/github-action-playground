@@ -3,6 +3,7 @@ FROM golang:alpine3.15 AS builder
 
 WORKDIR /
 COPY . .
+RUN go get -d
 RUN go build -o hello
 
 # Build the final image
