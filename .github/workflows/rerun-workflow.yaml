@@ -3,7 +3,6 @@ name: Rerun workflow
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/15 22-23 20-21 4 *'
     - cron: '*/15 0-10 20-21 4 *'
 
 jobs:
@@ -11,9 +10,8 @@ jobs:
     name: Rerun by workflow id
     runs-on: ubuntu-latest
     steps:
-      - run: >
-          curl
-            -X POST
-            -H "Accept: application/vnd.github.v3+json"
-            -H "Authorization: token ${{ secrets.WORKFLOW_TOKEN }}"
-            https://api.github.com/repos/MediaMarktSaturn/sterling-messaging-adapter/actions/runs/2198177138
+      - run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.WORKFLOW_TOKEN }}" \
+            "https://api.github.com/repos/MediaMarktSaturn/sterling-messaging-adapter/actions/runs/2198177138/rerun"
