@@ -3,7 +3,7 @@ name: Rerun workflow
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/15 0-10 20-21 4 *'
+    - cron: '*/15 0-14 21 4 *'
 
 jobs:
   rerun_by_id:
