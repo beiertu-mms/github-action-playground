@@ -1,0 +1,21 @@
+---
+name: Run on dev path
+on:
+  push:
+
+jobs:
+  confluent-cli:
+    name: Run Confluent CLI
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -sL --http1.1 https://cnfl.io/cli | sh -s -- latest
+          export PATH="$PATH:./bin"
+          whereis confluent
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - run: ./bin/confluent version
