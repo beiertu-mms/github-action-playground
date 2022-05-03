@@ -1,0 +1,48 @@
+---
+name: Run on dev path
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - "env/dev/hello.sh"
+
+jobs:
+  dev:
+    name: dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./env/dev/hello.sh 'run workflow on dev change'
+---
+name: Run on int path
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - "env/int/hello.sh"
+
+jobs:
+  int:
+    name: int
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./env/int/hello.sh 'run workflow on int change'
+---
+name: Run on qa path
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - "env/qa/hello.sh"
+
+jobs:
+  qa:
+    name: qa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./env/qa/hello.sh 'run workflow on qa change'
